@@ -42,6 +42,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = xcfName
             isStatic = true
+            export(project(":shared:utilsExtensions"))
 
         }
     }
@@ -57,6 +58,9 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
                 // Add KMP dependencies here
+
+                api(project(":shared:utilsExtensions"))
+
             }
         }
 
@@ -68,10 +72,14 @@ kotlin {
 
         androidMain {
             dependencies {
-                // Add Android-specific dependencies here. Note that this source set depends on
-                // commonMain by default and will correctly pull the Android artifacts of any KMP
-                // dependencies declared in commonMain.
+                implementation(project(":shared:utilsExtensions"))
+
             }
+        }
+
+        nativeMain.dependencies {
+            implementation(project(":shared:utilsExtensions"))
+
         }
 
         getByName("androidDeviceTest") {

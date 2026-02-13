@@ -29,6 +29,7 @@ kotlin {
             baseName = frameworkName
             isStatic = true
             export(project(":shared:core:domain"))
+            export(project(":shared:utilsExtensions"))
 
         }
     }
@@ -43,6 +44,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
 
             implementation(project(":shared:core:domain"))
+            implementation(project(":shared:utilsExtensions"))
+
 
         }
         commonMain.dependencies {
@@ -56,11 +59,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             api(project(":shared:core:domain"))
+            api(project(":shared:utilsExtensions"))
+
 
         }
 
         nativeMain.dependencies {
             implementation(project(":shared:core:domain"))
+            implementation(project(":shared:utilsExtensions"))
 
         }
         commonTest.dependencies {

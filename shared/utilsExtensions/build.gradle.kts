@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.android.lint)
     alias(libs.plugins.jetbrains.kotlin.serialization)
-
 }
 
 kotlin {
@@ -12,7 +11,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.brainx.domain"
+        namespace = "com.brainx.utils_extensions"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -33,7 +32,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "sharedCoreDomainKit"
+    val xcfName = "sharedUtilsExtensionsKit"
 
     listOf(
         iosX64(),
@@ -43,7 +42,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = xcfName
             isStatic = true
-            export(project(":shared:utilsExtensions"))
 
         }
     }
@@ -57,16 +55,14 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(libs.kotlinx.serialization.json)
                 // Add KMP dependencies here
-                api(project(":shared:utilsExtensions"))
-
             }
         }
 
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
 
@@ -75,16 +71,8 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
-                implementation(project(":shared:utilsExtensions"))
-
             }
         }
-
-        nativeMain.dependencies {
-            api(project(":shared:utilsExtensions"))
-
-        }
-
 
         getByName("androidDeviceTest") {
             dependencies {
