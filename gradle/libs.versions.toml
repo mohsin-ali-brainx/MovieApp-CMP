@@ -43,6 +43,9 @@ core = "1.7.0"
 uiTextAndroid = "1.9.1"
 okio = "3.16.0"
 uiTooling = "1.8.3"
+kotlinStdlib = "2.3.10"
+runnerVersion = "1.7.0"
+coreVersion = "1.7.0"
 
 [libraries]
 #Compose
@@ -108,6 +111,9 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runnerVersion" }
+androidx-core = { group = "androidx.test", name = "core", version.ref = "coreVersion" }
 
 
 [plugins]
@@ -121,6 +127,7 @@ android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+android-lint = { id = "com.android.lint", version.ref = "agp" }
 
 
 [bundles]

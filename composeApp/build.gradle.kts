@@ -28,6 +28,8 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = frameworkName
             isStatic = true
+            export(project(":shared:core:domain"))
+
         }
     }
 
@@ -39,6 +41,9 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(project(":shared:core:domain"))
+
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -49,6 +54,14 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            api(project(":shared:core:domain"))
+
+        }
+
+        nativeMain.dependencies {
+            implementation(project(":shared:core:domain"))
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
