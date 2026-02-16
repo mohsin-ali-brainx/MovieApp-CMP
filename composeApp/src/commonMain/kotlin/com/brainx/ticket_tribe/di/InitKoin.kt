@@ -5,6 +5,8 @@ import com.brainx.datasource.di.datastorePlatformModule
 import com.brainx.datasource.di.datastorePrefModule
 import com.brainx.datasource.di.ktorNetworkModule
 import com.brainx.datasource.di.ktorPlatformModule
+import com.brainx.datasource.di.roomDatabaseModule
+import com.brainx.datasource.di.roomPlatformModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -24,6 +26,10 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             // Ktor Network
             ktorPlatformModule,
             ktorNetworkModule,
+
+            // Room Database
+            roomPlatformModule,
+            roomDatabaseModule,
 
 
         )

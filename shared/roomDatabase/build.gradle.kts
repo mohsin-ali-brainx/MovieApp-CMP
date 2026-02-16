@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.android.lint)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -11,7 +13,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.brainx.datasource"
+        namespace = "com.brainx.room_database"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -32,7 +34,8 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "sharedCoreDatasourceKit"
+
+    val xcfName = "sharedRoomDatabaseKit"
 
     listOf(
         iosX64(),
@@ -43,11 +46,6 @@ kotlin {
             baseName = xcfName
             isStatic = true
             export(project(":shared:utilsExtensions"))
-            export(project(":shared:localDatastore"))
-            export(project(":shared:ktorNetwork"))
-            export(project(":shared:roomDatabase"))
-
-
         }
     }
 
@@ -60,21 +58,12 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(libs.kotlinx.serialization.json)
-
                 // Add KMP dependencies here
-                implementation(libs.koin.compose)
-                implementation(libs.koin.compose.viewmodel)
-                api(libs.koin.core)
-
                 api(project(":shared:utilsExtensions"))
-                api(project(":shared:localDatastore"))
-                api(project(":shared:ktorNetwork"))
-                api(project(":shared:roomDatabase"))
 
-
-                implementation(libs.bundles.ktor)
-
+                implementation(libs.androidx.room.runtime)
+                implementation(libs.sqlite.bundled)
+                api(libs.koin.core)
             }
         }
 
@@ -86,24 +75,18 @@ kotlin {
 
         androidMain {
             dependencies {
+                // Add Android-specific dependencies here. Note that this source set depends on
+                // commonMain by default and will correctly pull the Android artifacts of any KMP
+                // dependencies declared in commonMain.
                 implementation(project(":shared:utilsExtensions"))
-                implementation(project(":shared:localDatastore"))
-                implementation(project(":shared:ktorNetwork"))
-                implementation(project(":shared:roomDatabase"))
-
-
                 implementation(libs.koin.android)
                 implementation(libs.koin.androidx.compose)
-
 
             }
         }
 
         nativeMain.dependencies {
             implementation(project(":shared:utilsExtensions"))
-            implementation(project(":shared:localDatastore"))
-            implementation(project(":shared:ktorNetwork"))
-            implementation(project(":shared:roomDatabase"))
 
         }
 
@@ -126,4 +109,16 @@ kotlin {
         }
     }
 
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
 }

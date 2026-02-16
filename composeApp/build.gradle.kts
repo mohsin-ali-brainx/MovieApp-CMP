@@ -7,9 +7,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.jetbrains.kotlin.serialization)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
-
 }
 
 kotlin {
@@ -28,16 +25,11 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = frameworkName
             isStatic = true
-            export(project(":shared:core:domain"))
-            export(project(":shared:core:datasource"))
-            export(project(":shared:utilsExtensions"))
 
         }
     }
 
-    room {
-        schemaDirectory("$projectDir/schemas")
-    }
+
     
     sourceSets {
         androidMain.dependencies {
@@ -70,9 +62,9 @@ kotlin {
             api(libs.koin.core)
 
 
-            api(project(":shared:core:domain"))
-            api(project(":shared:core:datasource"))
-            api(project(":shared:utilsExtensions"))
+            implementation(project(":shared:core:domain"))
+            implementation(project(":shared:core:datasource"))
+            implementation(project(":shared:utilsExtensions"))
 
 
         }
@@ -119,7 +111,5 @@ android {
 dependencies {
     implementation(libs.androidx.runtime.android)
     debugImplementation(libs.compose.uiTooling)
-    ksp(libs.androidx.room.compiler)
-
 }
 

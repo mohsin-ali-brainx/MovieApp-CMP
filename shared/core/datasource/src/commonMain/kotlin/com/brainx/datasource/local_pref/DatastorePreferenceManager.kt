@@ -62,12 +62,12 @@ class DatastorePreferenceManager (
         }.first()
     }
 
-    suspend fun setAccessToken(value:String?): Boolean {
-        if (value.isNullOrBlank()) return false
+    suspend fun setAccessToken(value: String?): Boolean {
         return try {
             datastorePreference.edit { preferences ->
-                preferences[ACCESS_TOKEN_PREF_KEY] = value
-            }.apply { }
+                if (value.isNullOrBlank()) preferences.remove(ACCESS_TOKEN_PREF_KEY)
+                else preferences[ACCESS_TOKEN_PREF_KEY] = value
+            }
             true
         } catch (e: Exception) {
             false
@@ -80,12 +80,12 @@ class DatastorePreferenceManager (
         }.first()
     }
 
-    suspend fun setRefreshToken(value:String?): Boolean {
-        if (value.isNullOrBlank()) return false
+    suspend fun setRefreshToken(value: String?): Boolean {
         return try {
             datastorePreference.edit { preferences ->
-                preferences[REFRESH_TOKEN_PREF_KEY] = value
-            }.apply { }
+                if (value.isNullOrBlank()) preferences.remove(REFRESH_TOKEN_PREF_KEY)
+                else preferences[REFRESH_TOKEN_PREF_KEY] = value
+            }
             true
         } catch (e: Exception) {
             false
