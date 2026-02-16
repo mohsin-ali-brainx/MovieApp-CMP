@@ -76,6 +76,7 @@
 				33D246E72F3F48A900156F1F /* Compile Kotlin Framework (Datasource) */,
 				33D246E82F3F48C900156F1F /* Compile Kotlin Framework (Utils Extensions) */,
 				33D246E92F3F4FF600156F1F /* Compile Kotlin Framework (Ktor Network) */,
+				338437A42F42F2F90015CC60 /* Compile Kotlin Framework (Local Datastore) */,
 				36B447731710DBFCB48098C7 /* Sources */,
 				EBA977707A1B4FBB9471AE4D /* Frameworks */,
 				85A1F72C513972C18024FA20 /* Resources */,
@@ -139,6 +140,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		338437A42F42F2F90015CC60 /* Compile Kotlin Framework (Local Datastore) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Compile Kotlin Framework (Local Datastore)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :shared:localDatastore:embedAndSignAppleFrameworkForXcode\n";
+		};
 		33D246E62F3F2FE700156F1F /* Compile Kotlin Framework (Domain) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -320,6 +339,7 @@
 					"$(SRCROOT)/../shared/core/datasource/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 					"$(SRCROOT)/../shared/utilsExtensions/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 					"$(SRCROOT)/../shared/ktorNetwork/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+					"$(SRCROOT)/../shared/localDatastore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -356,6 +376,7 @@
 					"$(SRCROOT)/../shared/core/datasource/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 					"$(SRCROOT)/../shared/utilsExtensions/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 					"$(SRCROOT)/../shared/ktorNetwork/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+					"$(SRCROOT)/../shared/localDatastore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;

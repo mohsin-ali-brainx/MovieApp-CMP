@@ -29,6 +29,7 @@ kotlin {
             baseName = frameworkName
             isStatic = true
             export(project(":shared:core:domain"))
+            export(project(":shared:core:datasource"))
             export(project(":shared:utilsExtensions"))
 
         }
@@ -43,7 +44,13 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
 
+            implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+
             implementation(project(":shared:core:domain"))
+            implementation(project(":shared:core:datasource"))
             implementation(project(":shared:utilsExtensions"))
 
 
@@ -58,7 +65,13 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            api(libs.koin.core)
+
+
             api(project(":shared:core:domain"))
+            api(project(":shared:core:datasource"))
             api(project(":shared:utilsExtensions"))
 
 
@@ -66,6 +79,7 @@ kotlin {
 
         nativeMain.dependencies {
             implementation(project(":shared:core:domain"))
+            implementation(project(":shared:core:datasource"))
             implementation(project(":shared:utilsExtensions"))
 
         }

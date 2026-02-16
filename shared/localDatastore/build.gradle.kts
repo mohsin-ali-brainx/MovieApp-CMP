@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.android.lint)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -11,7 +10,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.brainx.datasource"
+        namespace = "com.brainx.local_datastore"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -32,7 +31,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "sharedCoreDatasourceKit"
+    val frameworkName = "sharedLocalDatastoreKit"
 
     listOf(
         iosX64(),
@@ -40,12 +39,9 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = xcfName
+            baseName = frameworkName
             isStatic = true
-            export(project(":shared:utilsExtensions"))
-            export(project(":shared:localDatastore"))
-            export(project(":shared:ktorNetwork"))
-
+            export(libs.datastore.preferences)
         }
     }
 
@@ -58,21 +54,11 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(libs.kotlinx.serialization.json)
-
-//                implementation(libs.datastore)
-//                implementation(libs.datastore.preferences)
                 // Add KMP dependencies here
-                implementation(libs.koin.compose)
-                implementation(libs.koin.compose.viewmodel)
                 api(libs.koin.core)
 
-                api(project(":shared:utilsExtensions"))
-                api(project(":shared:localDatastore"))
-                api(project(":shared:ktorNetwork"))
-
-                implementation(libs.bundles.ktor)
-
+                api(libs.datastore)
+                api(libs.datastore.preferences)
             }
         }
 
@@ -84,22 +70,12 @@ kotlin {
 
         androidMain {
             dependencies {
-                implementation(project(":shared:utilsExtensions"))
-                implementation(project(":shared:localDatastore"))
-                implementation(project(":shared:ktorNetwork"))
-
+                // Add Android-specific dependencies here. Note that this source set depends on
+                // commonMain by default and will correctly pull the Android artifacts of any KMP
+                // dependencies declared in commonMain.
                 implementation(libs.koin.android)
-                implementation(libs.koin.androidx.compose)
-
 
             }
-        }
-
-        nativeMain.dependencies {
-            implementation(project(":shared:utilsExtensions"))
-            implementation(project(":shared:localDatastore"))
-            implementation(project(":shared:ktorNetwork"))
-
         }
 
         getByName("androidDeviceTest") {

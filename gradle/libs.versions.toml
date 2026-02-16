@@ -145,3 +145,19 @@ coil = [
     "coil-network-ktor3",
     "coil-mp"
 ]
+
+koinAndroid = [
+    "koin-android",
+    "koin-androidx-compose"
+]
+
+koin = [
+    "koin-compose",
+    "koin-core",
+    "koin-compose-viewmodel"
+]
+
+datastore = [
+    "datastore",
+    "datastore-preferences"
+]

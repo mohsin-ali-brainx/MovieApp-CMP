@@ -3,7 +3,9 @@ package com.brainx.ktor_network.network_client
 import com.brainx.ktor_network.core.headers.EmptyHeaderProvider
 import com.brainx.ktor_network.core.headers.HeaderProvider
 import com.brainx.ktor_network.core.interfaces.TokenProvider
+import com.brainx.ktor_network.core.models.TokenRefreshResponse
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
@@ -17,6 +19,8 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.client.request.accept
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -74,20 +78,26 @@ class AppHttpClient(
                         if (access != null && refresh != null) BearerTokens(access, refresh) else null
                     }
 
-//                    refreshTokens {
-//                        val refresh = tokenStore.getRefreshToken() ?: return@refreshTokens null
-//
-//                        val response = runCatching {
-//                            refreshClient.post(ApiEndpoints.REFRESH_TOKEN) {
-//                                contentType(ContentType.Application.Json)
-//                                setBody(mapOf("refresh" to refresh))
-//                            }.body<AuthResponseModel>()
-//                        }.getOrNull() ?: return@refreshTokens null
-//
-//                        val data = response.data ?: return@refreshTokens null
-//                        tokenStore.saveTokens(data.access, data.refresh)
-//                        BearerTokens(data.access, data.refresh)
-//                    }
+                    refreshTokens {
+                        val refresh = tokenStore.getRefreshToken() ?: return@refreshTokens null
+                        val endPoint = tokenStore.getAccessTokenEndpoint() ?: return@refreshTokens null
+
+                        val response = runCatching {
+                            refreshClient.post(endPoint) {
+                                contentType(ContentType.Application.Json)
+                                setBody(mapOf("refresh" to refresh))
+                            }.body<TokenRefreshResponse>()
+                        }.getOrNull() ?: return@refreshTokens null
+                        val data = response.data ?: return@refreshTokens null
+                        data.run {
+                            tokenStore.saveTokens(
+                                accessToken = newAccessToken ?: "",
+                                refreshToken = newRefreshToken ?: ""
+                            )
+                            BearerTokens(newAccessToken?:"", newRefreshToken?:"")
+                        }
+
+                    }
                 }
             }
 
