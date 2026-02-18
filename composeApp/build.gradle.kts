@@ -1,5 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.GradleException
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -42,7 +43,7 @@ kotlin {
             implementation(libs.koin.androidx.compose)
 
             implementation(project(":shared:core:domain"))
-            implementation(project(":shared:core:datasource"))
+            implementation(project(":shared:core:bootstrapDI"))
             implementation(project(":shared:utilsExtensions"))
 
 
@@ -59,19 +60,18 @@ kotlin {
 
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            api(libs.koin.core)
+            implementation(libs.koin.core)
 
-
+            implementation(project(":shared:core:bootstrapDI"))
             implementation(project(":shared:core:domain"))
-            implementation(project(":shared:core:datasource"))
             implementation(project(":shared:utilsExtensions"))
 
 
         }
 
         nativeMain.dependencies {
+            implementation(project(":shared:core:bootstrapDI"))
             implementation(project(":shared:core:domain"))
-            implementation(project(":shared:core:datasource"))
             implementation(project(":shared:utilsExtensions"))
 
         }
@@ -112,4 +112,3 @@ dependencies {
     implementation(libs.androidx.runtime.android)
     debugImplementation(libs.compose.uiTooling)
 }
-

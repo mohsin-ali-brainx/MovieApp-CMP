@@ -7,10 +7,10 @@ import com.brainx.ktor_network.utils.contants.NetworkConstants.SESSION_EXPIRED_C
 
 class AppException : Exception {
 
-    private var errorMsg: String
-    private var errCode: Int = 0
-    private var errorLog: String?=EMPTY
-    var isSessionExpired:Boolean?=false
+     var errorMsg: String
+     var errCode: Int = 0
+     var errorLog: String?=EMPTY
+     var isSessionExpired:Boolean?=false
 
     constructor(errCode: Int?=null, error: String?, errorLog: String? = "") : super(error) {
         this.errorMsg = error ?: ERROR_OCCURRED

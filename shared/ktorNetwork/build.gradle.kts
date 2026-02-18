@@ -57,7 +57,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.bundles.ktor)
                 implementation(libs.kotlinx.serialization.json)
-                api(libs.koin.core)
+                implementation(libs.koin.core)
             }
         }
 

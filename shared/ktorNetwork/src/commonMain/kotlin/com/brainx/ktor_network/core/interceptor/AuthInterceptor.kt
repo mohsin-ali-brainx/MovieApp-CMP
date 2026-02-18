@@ -9,7 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 
-class AuthInterceptor(
+internal class AuthInterceptor(
 //    private val preference: DatastorePreferenceManager,
     private val token:String,
 ) {

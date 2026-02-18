@@ -14,28 +14,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.brainx.datasource.local_pref.DatastorePreferenceManager
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 import tickettribekmp.composeapp.generated.resources.Res
 import tickettribekmp.composeapp.generated.resources.compose_multiplatform
 
-import org.koin.compose.koinInject
-
-
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        val pref = koinInject<DatastorePreferenceManager>()
         val scope = rememberCoroutineScope()
 
         var buttonText by remember { mutableStateOf("") }
         var showContent by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
-            buttonText = pref.getAccessToken().orEmpty()
+            buttonText = "Click"
         }
 
         Column(
@@ -47,10 +41,6 @@ fun App() {
         ) {
             Button(
                 onClick = {
-                    scope.launch {
-                        pref.setAccessToken("Token is Change")
-                        buttonText = pref.getAccessToken().orEmpty()
-                    }
                     showContent = !showContent
                 }
             ) {

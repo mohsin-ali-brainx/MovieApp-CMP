@@ -43,7 +43,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = xcfName
             isStatic = true
-            export(project(":shared:utilsExtensions"))
 
         }
     }
@@ -58,9 +57,12 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
-                // Add KMP dependencies here
-                api(project(":shared:utilsExtensions"))
 
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.core)
+                // Add KMP dependencies here
+                implementation(project(":shared:utilsExtensions"))
             }
         }
 
@@ -77,11 +79,14 @@ kotlin {
                 // dependencies declared in commonMain.
                 implementation(project(":shared:utilsExtensions"))
 
+                implementation(libs.koin.android)
+                implementation(libs.koin.androidx.compose)
+
             }
         }
 
         nativeMain.dependencies {
-            api(project(":shared:utilsExtensions"))
+            implementation(project(":shared:utilsExtensions"))
 
         }
 

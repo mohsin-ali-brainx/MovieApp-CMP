@@ -8,7 +8,7 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
-actual class DatabaseFactory {
+internal actual class DatabaseFactory {
     actual fun createDatabase(): RoomDatabase.Builder<AppDatabase>  = getDatabaseBuilder()
 }
 

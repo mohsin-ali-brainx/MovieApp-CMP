@@ -9,28 +9,6 @@ import com.brainx.room_database.database.dao.MovieDao
 import com.brainx.room_database.database.entity.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-//
-//@Database(entities = [Movie::class], version = 1)
-//@ConstructedBy(AppDatabaseConstructor::class)
-//abstract class AppDatabase : RoomDatabase() {
-//
-//    abstract fun getMovieDao(): MovieDao
-//
-//}
-//
-//fun getMovieDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase {
-//    return builder
-//        .setDriver(BundledSQLiteDriver())
-//        .setQueryCoroutineContext(Dispatchers.IO)
-//        .build()
-//}
-//
-//// The Room compiler generates the `actual` implementations.
-//@Suppress("NO_ACTUAL_FOR_EXPECT")
-//expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
-//    override fun initialize(): AppDatabase
-//}
-
 
 @Database(
     entities = [Movie::class],
@@ -38,16 +16,16 @@ import kotlinx.coroutines.IO
     exportSchema = true
 )
 @ConstructedBy(AppDatabaseConstructor::class)
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT")
-expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
+internal expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
     override fun initialize(): AppDatabase
 }
 
-fun createAppDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase {
+internal fun createAppDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase {
     return builder
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)

@@ -6,10 +6,16 @@ import com.brainx.room_database.setup.createAppDatabase
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-expect val roomPlatformModule: Module
+internal expect val roomPlatformModule: Module
 
-val roomDatabaseModule = module {
+private val roomDatabaseModule = module {
     single { createAppDatabase(get<DatabaseFactory>().createDatabase()) }
-    single { get<AppDatabase>().movieDao() }
-//    single<MovieRepository> { MovieRepositoryImpl(get()) }
+
 }
+
+private val roomDaoModule = module {
+    single { get<AppDatabase>().movieDao() }
+}
+
+
+val provideRoomDatabaseModule = listOf( roomPlatformModule,roomDatabaseModule,roomDaoModule )

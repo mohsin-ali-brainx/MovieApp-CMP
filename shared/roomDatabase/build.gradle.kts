@@ -59,11 +59,11 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
-                api(project(":shared:utilsExtensions"))
+                implementation(project(":shared:utilsExtensions"))
 
                 implementation(libs.androidx.room.runtime)
                 implementation(libs.sqlite.bundled)
-                api(libs.koin.core)
+                implementation(libs.koin.core)
             }
         }
 

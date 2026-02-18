@@ -55,7 +55,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
-                api(libs.koin.core)
+                implementation(libs.koin.core)
 
                 api(libs.datastore)
                 api(libs.datastore.preferences)

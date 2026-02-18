@@ -42,12 +42,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = xcfName
             isStatic = true
-            export(project(":shared:utilsExtensions"))
-            export(project(":shared:localDatastore"))
-            export(project(":shared:ktorNetwork"))
-            export(project(":shared:roomDatabase"))
-
-
         }
     }
 
@@ -65,12 +59,14 @@ kotlin {
                 // Add KMP dependencies here
                 implementation(libs.koin.compose)
                 implementation(libs.koin.compose.viewmodel)
-                api(libs.koin.core)
+                implementation(libs.koin.core)
 
-                api(project(":shared:utilsExtensions"))
-                api(project(":shared:localDatastore"))
-                api(project(":shared:ktorNetwork"))
-                api(project(":shared:roomDatabase"))
+                implementation(project(":shared:core:domain"))
+
+                implementation(project(":shared:utilsExtensions"))
+                implementation(project(":shared:localDatastore"))
+                implementation(project(":shared:ktorNetwork"))
+                implementation(project(":shared:roomDatabase"))
 
 
                 implementation(libs.bundles.ktor)
@@ -86,6 +82,7 @@ kotlin {
 
         androidMain {
             dependencies {
+                implementation(project(":shared:core:domain"))
                 implementation(project(":shared:utilsExtensions"))
                 implementation(project(":shared:localDatastore"))
                 implementation(project(":shared:ktorNetwork"))
@@ -100,6 +97,7 @@ kotlin {
         }
 
         nativeMain.dependencies {
+            implementation(project(":shared:core:domain"))
             implementation(project(":shared:utilsExtensions"))
             implementation(project(":shared:localDatastore"))
             implementation(project(":shared:ktorNetwork"))

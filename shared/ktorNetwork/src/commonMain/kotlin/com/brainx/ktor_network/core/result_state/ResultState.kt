@@ -8,3 +8,22 @@ sealed class ResultState<out T> {
     class Error(val error: AppException) : ResultState<Nothing>()
     class SuccessWithErrorData<T>(val data: T?, val error: AppException, val headers: Headers) : ResultState<T>()
 }
+
+
+
+/*
+*
+*
+* Presentation -> Domain <- Datasource
+*
+*
+* Datasource - >Ktor
+* Datasource - >Room
+* Datasource - >Local Pref
+*
+*
+* BootStrap -> Datasource
+*
+* Presentation ->Bootstrap
+*
+* */

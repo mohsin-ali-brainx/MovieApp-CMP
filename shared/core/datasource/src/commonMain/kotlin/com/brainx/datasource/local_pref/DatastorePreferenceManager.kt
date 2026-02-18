@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class DatastorePreferenceManager (
+internal class DatastorePreferenceManager (
     private val datastorePreference: DataStore<Preferences>
 ){
     private enum class SPKeys(val key:String){

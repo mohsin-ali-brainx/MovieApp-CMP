@@ -7,8 +7,8 @@ import com.brainx.utils_extensions.constants.ExtConstants
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class NetworkTokenProviderManager(
-    private val datastorePreferenceManager: DatastorePreferenceManager
+internal class NetworkTokenProviderManager(
+    val datastorePreferenceManager: DatastorePreferenceManager
 ) : TokenProvider {
     override suspend fun getAccessTokenEndpoint(): String? = ApiEndpoints.Auth.REFRESH_TOKEN
 

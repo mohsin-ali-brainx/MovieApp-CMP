@@ -17,7 +17,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 
-class RefreshTokenHttpClient(
+internal class RefreshTokenHttpClient(
     private val engine: HttpClientEngine
 ) {
     fun createRefreshClient(): HttpClient {

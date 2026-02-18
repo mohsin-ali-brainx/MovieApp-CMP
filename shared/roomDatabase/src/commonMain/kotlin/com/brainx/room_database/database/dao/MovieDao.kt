@@ -7,7 +7,7 @@ import com.brainx.room_database.database.entity.Movie
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface MovieDao {
+internal interface MovieDao {
     @Query("SELECT * FROM movie")
     fun getMovies(): Flow<List<Movie>>
 

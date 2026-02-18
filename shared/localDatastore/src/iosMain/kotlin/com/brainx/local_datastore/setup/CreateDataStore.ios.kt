@@ -21,7 +21,7 @@ import platform.Foundation.NSUserDomainMask
 //}
 
 @OptIn(ExperimentalForeignApi::class)
-fun createDataStore(): DataStore<Preferences> = createDataStore(
+internal fun createDataStore(): DataStore<Preferences> = createDataStore(
     producePath = {
         val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
             directory = NSDocumentDirectory,
@@ -33,11 +33,3 @@ fun createDataStore(): DataStore<Preferences> = createDataStore(
         requireNotNull(documentDirectory).path + "/${DataStoreConstants.DATA_STORE_FILE_NAME}"
     }
 )
-
-/**
- * Simple function to get the home directory on iOS.
- * This avoids using complex native APIs directly.
- */
-private fun NSHomeDirectory(): String {
-    return  "/tmp"
-}

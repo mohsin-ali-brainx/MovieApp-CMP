@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.brainx.room_database.utils.DatabaseConstants
 
-actual class DatabaseFactory(
+internal actual class DatabaseFactory(
     private val context: Context
 ) {
     actual fun createDatabase(): RoomDatabase.Builder<AppDatabase>  = getDatabaseBuilder(context)

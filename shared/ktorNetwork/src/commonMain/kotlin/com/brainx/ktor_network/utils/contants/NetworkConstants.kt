@@ -1,6 +1,6 @@
 package com.brainx.ktor_network.utils.contants
 
-object NetworkConstants {
+internal object NetworkConstants {
     // region String
     const val ERROR_OCCURRED = "Error Occurred"
     const val EMPTY=""
