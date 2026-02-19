@@ -9,11 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.brainx.ticket_tribe.presentation.navigation.AppNavHostGraph
+import com.brainx.ticket_tribe.presentation.theme.MovieAppTheme
 import org.jetbrains.compose.resources.painterResource
 
 import tickettribekmp.composeapp.generated.resources.Res
@@ -22,41 +26,14 @@ import tickettribekmp.composeapp.generated.resources.compose_multiplatform
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        val scope = rememberCoroutineScope()
 
-        var buttonText by remember { mutableStateOf("") }
-        var showContent by remember { mutableStateOf(false) }
+    MovieAppTheme {
+        val navController = rememberNavController()
 
-        LaunchedEffect(Unit) {
-            buttonText = "Click"
-        }
-
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Scaffold(
+            Modifier.background(color = MaterialTheme.colorScheme.background)
         ) {
-            Button(
-                onClick = {
-                    showContent = !showContent
-                }
-            ) {
-                Text(if (buttonText.isBlank()) "No Token" else buttonText)
-            }
-
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
-            }
+            AppNavHostGraph(navController = navController)
         }
     }
 }

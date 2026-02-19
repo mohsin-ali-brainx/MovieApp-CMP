@@ -9,7 +9,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     startKoin {
         config?.invoke(this)
         modules(
-            listOf(coroutineDispatchersModule) + datasourceModuleProvider + domainModule
+            listOf(coroutineDispatchersModule,viewModelModule) + datasourceModuleProvider + domainModule
         )
     }
 }

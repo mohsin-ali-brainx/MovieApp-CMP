@@ -1,0 +1,5 @@
+package com.brainx.utils_extensions.utils.type_alias
+
+import androidx.compose.animation.AnimatedContentTransitionScope
+
+typealias SlideDirection = AnimatedContentTransitionScope.SlideDirection

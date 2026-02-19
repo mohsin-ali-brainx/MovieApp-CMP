@@ -59,7 +59,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
-                implementation(project(":shared:utilsExtensions"))
+                api(project(":shared:utilsExtensions"))
 
                 implementation(libs.androidx.room.runtime)
                 implementation(libs.sqlite.bundled)
@@ -86,7 +86,7 @@ kotlin {
         }
 
         nativeMain.dependencies {
-            implementation(project(":shared:utilsExtensions"))
+            api(project(":shared:utilsExtensions"))
 
         }
 

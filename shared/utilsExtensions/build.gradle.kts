@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.android.lint)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.composeCompiler)
+
 }
 
 kotlin {
@@ -55,6 +57,21 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+
+                implementation(libs.jetbrains.compose.navigation)
+
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                api(libs.koin.core)
+
+                implementation(libs.kotlinx.serialization.json)
+
                 // Add KMP dependencies here
             }
         }
@@ -68,6 +85,10 @@ kotlin {
 
         androidMain {
             dependencies {
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.koin.android)
+
+
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.

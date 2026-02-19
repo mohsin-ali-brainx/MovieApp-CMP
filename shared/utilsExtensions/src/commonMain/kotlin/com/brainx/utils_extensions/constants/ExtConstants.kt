@@ -58,10 +58,15 @@ sealed class ExtConstants {
         const val animDurationSec_Millis = 1000
         const val PULSE_RATE = 1.2f
 
+        const val PAGE_ANIM_DURATION = 500
+        const val IMAGE_ANIMATION_DURATION=800
+
     }
 
     object StringConstants : ExtConstants() {
         const val EMPTY = ""
+        const val NO_IMAGE_URL = "https://img.freepik.com/premium-vector/image-available-icon-set-default-missing-photo-stock-vector-symbol-black-filled-outlined-style-no-image-found-sign_268104-6708.jpg?semt=ais_hybrid&w=740"
+
     }
 
     object ExtRegexUtils {
