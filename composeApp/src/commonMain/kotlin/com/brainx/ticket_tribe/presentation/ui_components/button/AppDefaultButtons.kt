@@ -98,17 +98,20 @@ fun PrimaryButton(
     onClickAction: () -> Unit
 ){
     val isButtonEnable by remember(isEnable) { derivedStateOf { isEnable } }
+    val clickAction by remember(onClickAction) { derivedStateOf { onClickAction }  }
+    val buttonColor by remember(isButtonEnable) { derivedStateOf { if (isButtonEnable) buttonColor else buttonColor.copy(alpha = 0.90f)  }  }
+
     AppDefaultButton(
         modifier = modifier.then(Modifier.defaultFullWidthButtonModifier()),
         buttonText = buttonText,
         textColor = AppColors.primaryWhiteTextColor,
-        buttonColor = if (isButtonEnable) buttonColor else buttonColor.copy(alpha = 0.75f),
+        buttonColor = buttonColor,
         fontSize = AppDimens.Fonts.font16,
         fontWeight = FontWeight.W600,
         borderColor = borderColor,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         isClickable = isButtonEnable,
-        onClickAction = onClickAction
+        onClickAction = clickAction
     )
 }

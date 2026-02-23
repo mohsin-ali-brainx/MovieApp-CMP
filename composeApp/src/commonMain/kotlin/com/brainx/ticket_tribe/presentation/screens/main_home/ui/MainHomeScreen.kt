@@ -163,7 +163,9 @@ private fun MainContent(
                         end.linkTo(parent.end)
                     },
                     buttonText = CustomTextToDisplay.StringResourceText(text = Res.string.search),
-                ) {
+                    isEnable = searchText.isNotEmpty()
+                )
+                {
                     onIntent(MainHomeScreenUiIntents.ButtonIntents.OnSearchButtonIntent)
                 }
 
