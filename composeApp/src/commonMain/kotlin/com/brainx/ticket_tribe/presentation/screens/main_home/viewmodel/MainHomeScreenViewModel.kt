@@ -50,15 +50,20 @@ class MainHomeScreenViewModel(
     private fun searchMulti(page: Int = ONE, resetResults: Boolean = false) {
         if (resetResults) {
             searchJob?.cancel()
+            // Batch state update: reset results and set loading in one update
             _state.update {
                 it.copy(
-                    searchResponse = null
+                    searchResponse = null,
+                    isLoading = true
                 )
             }
         }
         searchJob = searchMultiUseCase.invoke(_state.value.searchText, page = page)
             .onStart {
-
+                // Only update loading state if not already set during reset
+                if (!resetResults) {
+                    _state.update { it.copy(isLoading = true) }
+                }
             }
             .onCompletion {
 
@@ -73,6 +78,8 @@ class MainHomeScreenViewModel(
                         )
                     }
                     is Resource.Error->{
+                        // Update loading state on error
+                        _state.update { it.copy(isLoading = false) }
 //                        Events.updateBaseEvent(BaseUiEvents.ShowToast(message = result.message))
                     }
                     is Resource.Loading -> {
@@ -140,6 +147,7 @@ class MainHomeScreenViewModel(
                 _state.update { it.copy(searchText = intent.search) }
             }
             is MainHomeScreenUiIntents.ButtonIntents.OnSearchButtonIntent->{
+                // Trigger search with reset - loading state is set in searchMulti
                 searchMulti(resetResults = true)
             }
             is MainHomeScreenUiIntents.ListItemIntent.OnMovieItemClick->{

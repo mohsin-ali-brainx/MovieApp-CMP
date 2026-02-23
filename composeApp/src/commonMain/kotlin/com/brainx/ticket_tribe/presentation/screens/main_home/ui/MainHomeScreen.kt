@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -27,13 +27,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.brainx.domain.network.dto_mappers.movie.MediaDTO
+import com.brainx.domain.network.dto_mappers.movie.SearchMultiMovieDto
 import com.brainx.ticket_tribe.presentation.navigation.AppRoutes
 import com.brainx.ticket_tribe.presentation.screens.main_home.ui_events.MainHomeScreenUiEvents
 import com.brainx.ticket_tribe.presentation.screens.main_home.ui_state.MainHomeScreenUiState
@@ -88,6 +92,11 @@ private fun MainContent(
     dataState: MainHomeScreenUiState,
     onIntent: (MainHomeScreenUiIntents) -> Unit
 ){
+    // Destructure state properties to enable granular recomposition tracking
+    val searchText = dataState.searchText
+    val searchResponse = dataState.searchResponse
+    val isLoading = dataState.isLoading
+    
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -121,22 +130,25 @@ private fun MainContent(
             ) {
                 val (searchBar, searchButton, listView,loader) = createRefs()
 
-                SearchBar(
+                SearchSection(
                     modifier = Modifier.constrainAs(searchBar) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                         end.linkTo(searchButton.start, margin = AppDimens.Padding.smallPadding)
                         width = Dimension.fillToConstraints
                     },
-                    text = dataState.searchText,
-                    keyboardActions = KeyboardActions(onSearch = {
+                    searchText = searchText,
+                    onSearchTextChange = {
+                        onIntent(MainHomeScreenUiIntents.TextFieldsIntent.OnSearchTextUpdate(search = it))
+                    },
+                    onSearchClick = {
                         keyboardController?.hide()
                         focusManager.clearFocus()
                         onIntent(MainHomeScreenUiIntents.ButtonIntents.OnSearchButtonIntent)
-                    })
-                ) {
-                    onIntent(MainHomeScreenUiIntents.TextFieldsIntent.OnSearchTextUpdate(search = it))
-                }
+                    },
+                    keyboardController = keyboardController,
+                    focusManager = focusManager
+                )
 
                 PrimaryButton(
                     modifier = Modifier.constrainAs(searchButton) {
@@ -147,11 +159,8 @@ private fun MainContent(
                     onIntent(MainHomeScreenUiIntents.ButtonIntents.OnSearchButtonIntent)
                 }
 
-
-
-                LazyColumn(
+                ResultsSection(
                     modifier = Modifier
-//                        .imePadding()
                         .animateContentSize(
                             animationSpec = spring(
                                 dampingRatio = Spring.DampingRatioLowBouncy,
@@ -168,40 +177,94 @@ private fun MainContent(
                             height = Dimension.fillToConstraints
                             width = Dimension.matchParent
                         },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(AppDimens.Padding.smallPadding)
-                ) {
-                    itemsIndexed(items = dataState.searchResponse?.result?:emptyList()){index, item ->
-                        MovieCarousal(
-                            modifier = Modifier.fillMaxWidth(),
-                            data = item,
-                            onLoadMore = {
-                                onIntent(MainHomeScreenUiIntents.ListItemIntent.OnTriggerPagination)
-                            },
-                            onClick = {
-                                onIntent(MainHomeScreenUiIntents.ListItemIntent.OnMovieItemClick(media = it))
-                            }
-                        )
+                    searchResponse = searchResponse,
+                    onItemClick = { media ->
+                        onIntent(MainHomeScreenUiIntents.ListItemIntent.OnMovieItemClick(media = media))
+                    },
+                    onLoadMore = {
+                        onIntent(MainHomeScreenUiIntents.ListItemIntent.OnTriggerPagination)
                     }
-                }
+                )
 
-                if (dataState.isLoading
-                    &&
-                    (dataState.searchResponse?.metaData?.page ?: ExtConstants.IntegerConstants.ONE) <= ExtConstants.IntegerConstants.ONE
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .constrainAs(loader) {
-                                linkTo(start = parent.start, end = parent.end)
-                                linkTo(top = parent.top, bottom = parent.bottom)
-                            }
-                            .size(AppDimens.Icons.loaderSize),
-                        color = AppColors.secondaryColor
-                    )
-                }
+                LoadingIndicator(
+                    modifier = Modifier.constrainAs(loader) {
+                        linkTo(start = parent.start, end = parent.end)
+                        linkTo(top = parent.top, bottom = parent.bottom)
+                    },
+                    isLoading = isLoading,
+                    currentPage = searchResponse?.metaData?.page
+                )
             }
         }
 
+    }
+}
+
+@Composable
+private fun SearchSection(
+    modifier: Modifier = Modifier,
+    searchText: String,
+    onSearchTextChange: (String) -> Unit,
+    onSearchClick: () -> Unit,
+    keyboardController: SoftwareKeyboardController?,
+    focusManager: FocusManager
+) {
+    SearchBar(
+        modifier = modifier,
+        text = searchText,
+        keyboardActions = KeyboardActions(onSearch = {
+            keyboardController?.hide()
+            focusManager.clearFocus()
+            onSearchClick()
+        })
+    ) {
+        onSearchTextChange(it)
+    }
+}
+
+@Composable
+private fun ResultsSection(
+    modifier: Modifier = Modifier,
+    searchResponse: SearchMultiMovieDto?,
+    onItemClick: (MediaDTO) -> Unit,
+    onLoadMore: () -> Unit
+) {
+    // Use remember to prevent list recreation on every recomposition
+    val items = remember(searchResponse) {
+        searchResponse?.result ?: emptyList()
+    }
+
+    LazyColumn(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(AppDimens.Padding.smallPadding)
+    ) {
+        items(
+            items = items,
+            key = { item -> item.mediaType } // Stable key for efficient recomposition
+        ) { item ->
+            MovieCarousal(
+                modifier = Modifier.fillMaxWidth(),
+                data = item,
+                onLoadMore = onLoadMore,
+                onClick = onItemClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoadingIndicator(
+    modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    currentPage: Int?
+) {
+    // Only show loading indicator on first page
+    if (isLoading && (currentPage ?: ExtConstants.IntegerConstants.ONE) <= ExtConstants.IntegerConstants.ONE) {
+        CircularProgressIndicator(
+            modifier = modifier.size(AppDimens.Icons.loaderSize),
+            color = AppColors.secondaryColor
+        )
     }
 }
 
