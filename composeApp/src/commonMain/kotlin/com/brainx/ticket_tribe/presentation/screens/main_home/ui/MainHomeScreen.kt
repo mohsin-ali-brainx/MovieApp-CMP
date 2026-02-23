@@ -21,6 +21,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,6 +65,7 @@ fun MainHomeScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
+    // ConsumeUIEffects already handles flow collection efficiently
     ConsumeUIEffects(uiEvents) { event, scope ->
         when (event) {
             is MainHomeScreenUiEvents.Navigate.MoveToDetail -> {
@@ -99,6 +101,24 @@ private fun MainContent(
         isKeyboardVisible = keyboardHeight > 0
     }
 
+    // Use derivedStateOf for computed values to prevent unnecessary recompositions
+    val searchResults = remember(dataState.searchResponse) {
+        derivedStateOf {
+            dataState.searchResponse?.result ?: emptyList()
+        }
+    }
+
+    // Remember search text to isolate recompositions
+    val searchText = remember(dataState.searchText) { dataState.searchText }
+
+    // Remember loading state with page check to prevent unnecessary recompositions
+    val shouldShowLoading = remember(dataState.isLoading, dataState.searchResponse?.metaData?.page) {
+        derivedStateOf {
+            dataState.isLoading &&
+            (dataState.searchResponse?.metaData?.page ?: ExtConstants.IntegerConstants.ONE) <= ExtConstants.IntegerConstants.ONE
+        }
+    }
+
     Scaffold(
         modifier = Modifier.background(AppColors.mainBackgroundColor)
             .fillMaxSize()
@@ -128,7 +148,7 @@ private fun MainContent(
                         end.linkTo(searchButton.start, margin = AppDimens.Padding.smallPadding)
                         width = Dimension.fillToConstraints
                     },
-                    text = dataState.searchText,
+                    text = searchText,
                     keyboardActions = KeyboardActions(onSearch = {
                         keyboardController?.hide()
                         focusManager.clearFocus()
@@ -171,7 +191,10 @@ private fun MainContent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(AppDimens.Padding.smallPadding)
                 ) {
-                    itemsIndexed(items = dataState.searchResponse?.result?:emptyList()){index, item ->
+                    itemsIndexed(
+                        items = searchResults.value,
+                        key = { index, item -> item.mediaType } // Stable key for efficient recomposition
+                    ) { index, item ->
                         MovieCarousal(
                             modifier = Modifier.fillMaxWidth(),
                             data = item,
@@ -185,10 +208,7 @@ private fun MainContent(
                     }
                 }
 
-                if (dataState.isLoading
-                    &&
-                    (dataState.searchResponse?.metaData?.page ?: ExtConstants.IntegerConstants.ONE) <= ExtConstants.IntegerConstants.ONE
-                ) {
+                if (shouldShowLoading.value) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .constrainAs(loader) {
