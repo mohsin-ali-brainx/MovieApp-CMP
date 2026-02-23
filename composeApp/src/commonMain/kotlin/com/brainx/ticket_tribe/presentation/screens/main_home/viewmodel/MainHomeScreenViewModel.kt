@@ -11,6 +11,7 @@ import com.brainx.ticket_tribe.presentation.screens.main_home.ui_intents.MainHom
 import com.brainx.ticket_tribe.presentation.screens.main_home.ui_state.MainHomeScreenUiState
 import com.brainx.utils_extensions.constants.ExtConstants.IntegerConstants.ONE
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,6 +29,8 @@ class MainHomeScreenViewModel(
     private val ioDispatcher : CoroutineDispatcher,
     private val searchMultiUseCase: SearchMultiUseCase
 ): ViewModel() {
+    private var searchJob: Job? = null
+
     private val _state = MutableStateFlow(MainHomeScreenUiState())
     val state = _state.stateIn(
         scope = viewModelScope,
@@ -44,8 +47,16 @@ class MainHomeScreenViewModel(
         }
     }
 
-    private fun searchMulti(page:Int= ONE){
-        searchMultiUseCase.invoke(_state.value.searchText, page = page)
+    private fun searchMulti(page: Int = ONE, resetResults: Boolean = false) {
+        if (resetResults) {
+            searchJob?.cancel()
+            _state.update {
+                it.copy(
+                    searchResponse = null
+                )
+            }
+        }
+        searchJob = searchMultiUseCase.invoke(_state.value.searchText, page = page)
             .onStart {
 
             }
@@ -56,7 +67,10 @@ class MainHomeScreenViewModel(
                 when(result){
                     is Resource.Success->{
                         val responseResultData = result.data
-                        updateListState(responseResultData = responseResultData)
+                        updateListState(
+                            responseResultData = responseResultData,
+                            appendToExisting = !resetResults
+                        )
                     }
                     is Resource.Error->{
 //                        Events.updateBaseEvent(BaseUiEvents.ShowToast(message = result.message))
@@ -70,9 +84,16 @@ class MainHomeScreenViewModel(
             .launchIn(viewModelScope)
     }
 
-    private fun updateListState(responseResultData: SearchMultiMovieDto?) {
+    private fun updateListState(
+        responseResultData: SearchMultiMovieDto?,
+        appendToExisting: Boolean
+    ) {
         _state.update { currentState ->
-            val previousList = currentState.searchResponse?.result ?: emptyList()
+            val previousList = if (appendToExisting) {
+                currentState.searchResponse?.result ?: emptyList()
+            } else {
+                emptyList()
+            }
             val newList = responseResultData?.result ?: emptyList()
 
 
@@ -119,20 +140,7 @@ class MainHomeScreenViewModel(
                 _state.update { it.copy(searchText = intent.search) }
             }
             is MainHomeScreenUiIntents.ButtonIntents.OnSearchButtonIntent->{
-                _state.value.apply {
-                    _state.update {currentState->
-                        currentState.copy(
-                            searchResponse = SearchMultiMovieDto(
-                                result = searchResponse?.result ?: emptyList(),
-                                metaData = searchResponse?.metaData
-                            ),
-                            isLoading = false
-                        )
-
-                    }
-                }
-
-                searchMulti()
+                searchMulti(resetResults = true)
             }
             is MainHomeScreenUiIntents.ListItemIntent.OnMovieItemClick->{
                 emitUIEvents(MainHomeScreenUiEvents.Navigate.MoveToDetail(intent.media))

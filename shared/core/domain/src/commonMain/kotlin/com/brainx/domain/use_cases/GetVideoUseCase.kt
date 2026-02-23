@@ -24,15 +24,14 @@ class GetVideoUseCase(
         return response.map { resultState ->
             when (resultState) {
                 is NetworkResultState.Success -> {
-
-                    if (resultState.data?.results?.isNotEmpty()==true){
-                        Resource.Success(resultState.data.results.first().toVideoDTO())
-                    }else{
-                        Resource.Success(null)
-                    }
+                    val video = resultState.data?.results?.firstOrNull()?.toVideoDTO()
+                    Resource.Success(video)
                 }
                 is NetworkResultState.Error -> Resource.Error(resultState.error.errorMsg , null)
-                is NetworkResultState.SuccessWithErrorData -> Resource.Error(resultState.error.errorMsg , resultState.data?.results?.first()?.toVideoDTO())
+                is NetworkResultState.SuccessWithErrorData -> {
+                    val fallbackVideo = resultState.data?.results?.firstOrNull()?.toVideoDTO()
+                    Resource.Error(resultState.error.errorMsg, fallbackVideo)
+                }
             }
         }.onStart {
             emit(Resource.Loading(true))

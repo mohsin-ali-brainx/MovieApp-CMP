@@ -13,8 +13,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.brainx.domain.network.dto_mappers.movie.MediaDTO
 import com.brainx.domain.network.dto_mappers.movie.MovieTypeDTO
-import com.brainx.domain.network.models.media.MediaModel
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomText
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomTextToDisplay
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 fun MovieCarousal(
     modifier: Modifier,
     data: MovieTypeDTO,
-    onClick: (MediaModel) -> Unit,
+    onClick: (MediaDTO) -> Unit,
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()

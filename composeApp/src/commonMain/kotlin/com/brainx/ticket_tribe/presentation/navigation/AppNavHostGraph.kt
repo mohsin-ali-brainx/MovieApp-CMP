@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
-import com.brainx.domain.network.models.media.MediaModel
+import com.brainx.domain.network.dto_mappers.movie.MediaDTO
 import com.brainx.ticket_tribe.presentation.screens.detail.DetailScreen
 import com.brainx.ticket_tribe.presentation.screens.main_home.ui.MainHomeScreen
 import com.brainx.ticket_tribe.presentation.screens.main_home.viewmodel.MainHomeScreenViewModel
@@ -61,7 +61,7 @@ private fun NavGraphBuilder.detailScreen(
         val args = backStackEntry.toRoute<AppRoutes.Detail>()
 
         DetailScreen(
-            mediaDataModel = args.mediaDataModelJson.toModel<MediaModel>(),
+            mediaDataModel = args.mediaDataModelJson.toModel<MediaDTO>(),
             onNavigate = {
 
             },

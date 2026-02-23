@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
-import com.brainx.domain.network.models.media.MediaModel
+import com.brainx.domain.network.dto_mappers.movie.MediaDTO
 import com.brainx.ticket_tribe.presentation.theme.AppColors
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomText
@@ -42,7 +42,7 @@ import com.brainx.utils_extensions.constants.ExtConstants.IntegerConstants.ONE
 import com.brainx.utils_extensions.constants.ExtConstants.StringConstants.NO_IMAGE_URL
 
 @Composable
-fun MovieCard(modifier: Modifier, data: MediaModel) {
+fun MovieCard(modifier: Modifier, data: MediaDTO) {
     Column(
         modifier = modifier
             .width(140.dp),

@@ -1,6 +1,5 @@
 package com.brainx.ticket_tribe.presentation.navigation
 
-import com.brainx.domain.network.models.media.MediaModel
 import kotlinx.serialization.Serializable
 @Serializable
 sealed class AppRoutes {

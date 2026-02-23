@@ -37,7 +37,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
-import com.brainx.domain.network.models.media.MediaModel
+import com.brainx.domain.network.dto_mappers.movie.MediaDTO
 import com.brainx.ticket_tribe.presentation.navigation.AppRoutes
 import com.brainx.ticket_tribe.presentation.theme.AppColors
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
@@ -59,7 +59,7 @@ import tickettribekmp.composeapp.generated.resources.ic_play
 
 @Composable
 fun DetailScreen(
-    mediaDataModel: MediaModel,
+    mediaDataModel: MediaDTO,
     onNavigate: (AppRoutes) -> Unit,
     onBack:()->Unit
 ){

@@ -1,7 +1,7 @@
 package com.brainx.ticket_tribe.presentation.screens.main_home.ui_intents
 
 
-import com.brainx.domain.network.models.media.MediaModel
+import com.brainx.domain.network.dto_mappers.movie.MediaDTO
 import kotlin.jvm.JvmInline
 
 
@@ -15,7 +15,7 @@ sealed interface MainHomeScreenUiIntents {
     }
     sealed interface ListItemIntent{
         @JvmInline
-        value class OnMovieItemClick(val media: MediaModel) : MainHomeScreenUiIntents
+        value class OnMovieItemClick(val media: MediaDTO) : MainHomeScreenUiIntents
 
         data object OnTriggerPagination : MainHomeScreenUiIntents
     }
