@@ -4,6 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 
 @Composable
 fun MovieAppTheme(
@@ -11,9 +12,12 @@ fun MovieAppTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    CompositionLocalProvider(){
+    val appColorTheme = remember(darkTheme) { buildAppTheme(darkTheme) }
+
+    CompositionLocalProvider(
+        LocalAppTheme provides appColorTheme
+    ){
         MaterialTheme(
-            colorScheme = AppColorScheme,
             typography = InterTypography(),
             content = content
         )

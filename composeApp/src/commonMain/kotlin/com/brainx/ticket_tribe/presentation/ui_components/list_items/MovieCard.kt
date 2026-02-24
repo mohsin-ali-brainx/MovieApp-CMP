@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.brainx.domain.network.dto_mappers.movie.MediaDTO
-import com.brainx.ticket_tribe.presentation.theme.AppColors
+import com.brainx.ticket_tribe.presentation.theme.LocalAppTheme
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomText
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomTextToDisplay
@@ -43,6 +43,8 @@ import com.brainx.utils_extensions.constants.ExtConstants.StringConstants.NO_IMA
 
 @Composable
 fun MovieCard(modifier: Modifier, data: MediaDTO) {
+
+    val appThemeColor =  LocalAppTheme.current
 
     val displayText = remember(data.name, data.title) {
         data.name ?: data.title ?: ExtConstants.StringConstants.EMPTY
@@ -62,7 +64,7 @@ fun MovieCard(modifier: Modifier, data: MediaDTO) {
             text = CustomTextToDisplay.StringText(
                 text = displayText
             ),
-            color = AppColors.secondaryTextColor,
+            color = appThemeColor.secondaryTextColor,
             fontSize = AppDimens.Fonts.font18,
             maxLines = 1,
             minLines = 1,

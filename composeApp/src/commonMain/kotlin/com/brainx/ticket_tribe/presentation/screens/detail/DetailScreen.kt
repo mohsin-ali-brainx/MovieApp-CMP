@@ -39,8 +39,8 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.brainx.domain.network.dto_mappers.movie.MediaDTO
 import com.brainx.ticket_tribe.presentation.navigation.AppRoutes
-import com.brainx.ticket_tribe.presentation.theme.AppColors
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
+import com.brainx.ticket_tribe.presentation.theme.LocalAppTheme
 import com.brainx.ticket_tribe.presentation.ui_components.button.PrimaryButton
 import com.brainx.ticket_tribe.presentation.ui_components.list_items.MoviePoster
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomText
@@ -63,16 +63,18 @@ fun DetailScreen(
     onNavigate: (AppRoutes) -> Unit,
     onBack:()->Unit
 ){
+    val appThemeColor =  LocalAppTheme.current
+
 
     Scaffold(
-        modifier = Modifier.background(AppColors.mainBackgroundColor)
+        modifier = Modifier.background(appThemeColor.mainBackgroundColor)
             .fillMaxSize()
             .imePadding()
     ) { paddingValues ->
         ConstraintLayout(
             Modifier
                 .fillMaxSize()
-                .background(AppColors.mainBackgroundColor)
+                .background(appThemeColor.mainBackgroundColor)
                 .padding(paddingValues)
         ) {
             val (backBtn,banner,gradient,poster,button,title,description) = createRefs()
@@ -124,7 +126,7 @@ fun DetailScreen(
                         top.linkTo(poster.bottom, margin = AppDimens.Padding.mediumPadding)
                     },
                 text = CustomTextToDisplay.StringText(mediaDataModel.title ?: mediaDataModel.name ?: ""),
-                color = AppColors.primaryWhiteTextColor,
+                color = appThemeColor.primaryWhiteTextColor,
                 fontSize = AppDimens.Fonts.font24,
                 fontWeight = FontWeight.Bold
             )
@@ -143,7 +145,7 @@ fun DetailScreen(
                         top.linkTo(title.bottom, margin = AppDimens.Padding.smallPadding12)
                     },
                 text = CustomTextToDisplay.StringText(mediaDataModel.overview ?: ""),
-                color = AppColors.primaryWhiteTextColor,
+                color = appThemeColor.primaryWhiteTextColor,
                 fontSize = AppDimens.Fonts.font16,
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Start
@@ -160,7 +162,7 @@ fun DetailScreen(
                     leadingIcon = {
                         Icon(painter = painterResource(Res.drawable.ic_play), contentDescription = ExtConstants.StringConstants.EMPTY)
                     },
-                    buttonColor = AppColors.secondaryColor,
+                    buttonColor = appThemeColor.secondaryColor,
                     buttonText = CustomTextToDisplay.StringResourceText(Res.string.play_video))
                 {
                     mediaDataModel.apply {
@@ -185,7 +187,7 @@ fun DetailScreen(
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_arrow_back),
-                    tint = AppColors.primaryWhiteIconColor,
+                    tint = appThemeColor.primaryWhiteIconColor,
                     contentDescription = ExtConstants.StringConstants.EMPTY)
             }
         }

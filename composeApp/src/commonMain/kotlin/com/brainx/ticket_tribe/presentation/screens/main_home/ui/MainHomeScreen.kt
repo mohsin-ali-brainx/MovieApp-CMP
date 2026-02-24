@@ -39,7 +39,7 @@ import com.brainx.ticket_tribe.presentation.navigation.AppRoutes
 import com.brainx.ticket_tribe.presentation.screens.main_home.ui_events.MainHomeScreenUiEvents
 import com.brainx.ticket_tribe.presentation.screens.main_home.ui_state.MainHomeScreenUiState
 import com.brainx.ticket_tribe.presentation.screens.main_home.ui_intents.MainHomeScreenUiIntents
-import com.brainx.ticket_tribe.presentation.theme.AppColors
+import com.brainx.ticket_tribe.presentation.theme.LocalAppTheme
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
 import com.brainx.ticket_tribe.presentation.ui_components.button.PrimaryButton
 import com.brainx.ticket_tribe.presentation.ui_components.list_items.MovieCarousal
@@ -97,6 +97,8 @@ private fun MainContent(
 
     val keyboardHeight = WindowInsets.ime.getBottom(density = LocalDensity.current)
 
+    val appThemeColor =  LocalAppTheme.current
+
     LaunchedEffect(key1 = keyboardHeight) {
         isKeyboardVisible = keyboardHeight > 0
     }
@@ -120,7 +122,7 @@ private fun MainContent(
     }
 
     Scaffold(
-        modifier = Modifier.background(AppColors.mainBackgroundColor)
+        modifier = Modifier.background(appThemeColor.mainBackgroundColor)
             .fillMaxSize()
 //            .statusBarsPadding()
             .imePadding()
@@ -135,7 +137,7 @@ private fun MainContent(
             ConstraintLayout(
                 Modifier
                     .fillMaxSize()
-                    .background(AppColors.mainBackgroundColor)
+                    .background(appThemeColor.mainBackgroundColor)
                     .padding(horizontal = AppDimens.Padding.defaultPadding)
                     .padding(paddingValues)
             ) {
@@ -218,7 +220,7 @@ private fun MainContent(
                                 linkTo(top = parent.top, bottom = parent.bottom)
                             }
                             .size(AppDimens.Icons.loaderSize),
-                        color = AppColors.secondaryColor
+                        color = appThemeColor.secondaryColor
                     )
                 }
             }

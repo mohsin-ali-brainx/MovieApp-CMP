@@ -33,8 +33,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.brainx.ticket_tribe.presentation.theme.AppColors
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
+import com.brainx.ticket_tribe.presentation.theme.LocalAppTheme
 import com.brainx.ticket_tribe.presentation.theme.defaultEditTextShape
 import com.brainx.utils_extensions.constants.ExtConstants
 import org.jetbrains.compose.resources.painterResource
@@ -49,9 +49,9 @@ fun CustomBasicTextField(
     text: String,
     placeHolderText:String?=null,
     cursorBrush: Color = Color.White,
-    textStyle: TextStyle = EditTextStyle(),
+    textStyle: TextStyle = editTextStyle(),
     hintTextColor: Color?=null,
-    hintTextStyle: TextStyle = EditTextStyle(
+    hintTextStyle: TextStyle = editTextStyle(
         textColor = hintTextColor ?: MaterialTheme.colorScheme.onSecondaryContainer
     ),
     maxLength:Int?=null,
@@ -152,9 +152,9 @@ fun CustomTextField(
     text: String,
     placeHolderText:String?=null,
     cursorBrush: Color = Color.White,
-    textStyle: TextStyle = EditTextStyle(),
+    textStyle: TextStyle = editTextStyle(),
     hintTextColor: Color?=null,
-    hintTextStyle: TextStyle = EditTextStyle(
+    hintTextStyle: TextStyle = editTextStyle(
         textColor = hintTextColor ?: MaterialTheme.colorScheme.onSecondaryContainer
     ),
     maxLength:Int?=null,
@@ -215,15 +215,16 @@ fun SearchBar(
     keyboardActions: KeyboardActions = KeyboardActions(),
     onValueChange: (String) -> Unit
 ){
+    val appThemeColor =  LocalAppTheme.current
     val editTextModifier = modifier
         .height(AppDimens.EditText.searchBarHeight)
-        .background(AppColors.mainEditTextColor, shape = defaultEditTextShape())
+        .background(appThemeColor.mainEditTextColor, shape = defaultEditTextShape())
         .clip(defaultEditTextShape())
     CustomTextField(
         text = text,
         placeHolderText = stringResource(Res.string.search_movies),
         modifier = editTextModifier,
-        hintTextColor = AppColors.primaryWhiteTextColor.copy(alpha = 0.3F),
+        hintTextColor = appThemeColor.primaryWhiteTextColor.copy(alpha = 0.3F),
         onValueChange = onValueChange,
         imeAction = imeAction,
         keyboardActions = keyboardActions,
@@ -237,6 +238,6 @@ fun SearchBar(
 
 @Preview
 @Composable
-private fun previewSearch(){
+private fun PreviewSearch(){
     SearchBar(modifier = Modifier, text = "") { }
 }
