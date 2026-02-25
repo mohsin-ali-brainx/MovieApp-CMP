@@ -1,4 +1,4 @@
-rootProject.name = "TicketTribeKMP"
+rootProject.name = "MovieAppCMP"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

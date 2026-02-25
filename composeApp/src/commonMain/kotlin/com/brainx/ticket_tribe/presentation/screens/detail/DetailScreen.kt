@@ -48,14 +48,13 @@ import com.brainx.ticket_tribe.presentation.ui_components.text.CustomTextToDispl
 import com.brainx.utils_extensions.compose_ui_utils.animation.PulseAnimation
 import com.brainx.utils_extensions.constants.ExtConstants
 import com.brainx.utils_extensions.constants.ExtConstants.AnimationsConstants.IMAGE_ANIMATION_DURATION
-import tickettribekmp.composeapp.generated.resources.Res
-import tickettribekmp.composeapp.generated.resources.play_video
 import com.brainx.domain.utils.media_type_utils.isVideoContent
-import com.brainx.utils_extensions.compose_ui_utils.safe_click.clickableSingleWithoutRipple
 import com.brainx.utils_extensions.constants.ExtConstants.StringConstants.NO_IMAGE_URL
+import movieappcmp.composeapp.generated.resources.Res
+import movieappcmp.composeapp.generated.resources.ic_arrow_back
+import movieappcmp.composeapp.generated.resources.ic_play
+import movieappcmp.composeapp.generated.resources.play_video
 import org.jetbrains.compose.resources.painterResource
-import tickettribekmp.composeapp.generated.resources.ic_arrow_back
-import tickettribekmp.composeapp.generated.resources.ic_play
 
 @Composable
 fun DetailScreen(

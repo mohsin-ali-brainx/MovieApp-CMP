@@ -51,8 +51,8 @@ import com.brainx.utils_extensions.constants.ExtConstants
 import com.brainx.utils_extensions.navigation.toJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import tickettribekmp.composeapp.generated.resources.Res
-import tickettribekmp.composeapp.generated.resources.search
+import movieappcmp.composeapp.generated.resources.Res
+import movieappcmp.composeapp.generated.resources.search
 
 @Composable
 fun MainHomeScreen(

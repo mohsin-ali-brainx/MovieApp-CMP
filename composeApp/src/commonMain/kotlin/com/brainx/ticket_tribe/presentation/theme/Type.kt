@@ -3,27 +3,26 @@ package com.brainx.ticket_tribe.presentation.theme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
-import tickettribekmp.composeapp.generated.resources.Res
-import tickettribekmp.composeapp.generated.resources.inter_tight_bold
-import tickettribekmp.composeapp.generated.resources.inter_tight_extra_bold
-import tickettribekmp.composeapp.generated.resources.inter_tight_light
-import tickettribekmp.composeapp.generated.resources.inter_tight_medium
-import tickettribekmp.composeapp.generated.resources.inter_tight_regular
-import tickettribekmp.composeapp.generated.resources.inter_tight_semi_bold
-import tickettribekmp.composeapp.generated.resources.inter_tight_thin
-import tickettribekmp.composeapp.generated.resources.ubuntu_bold
-import tickettribekmp.composeapp.generated.resources.ubuntu_bold_italic
-import tickettribekmp.composeapp.generated.resources.ubuntu_italic
-import tickettribekmp.composeapp.generated.resources.ubuntu_light
-import tickettribekmp.composeapp.generated.resources.ubuntu_light_italic
-import tickettribekmp.composeapp.generated.resources.ubuntu_medium
-import tickettribekmp.composeapp.generated.resources.ubuntu_medium_italic
-import tickettribekmp.composeapp.generated.resources.ubuntu_regular
+import movieappcmp.composeapp.generated.resources.Res
+import movieappcmp.composeapp.generated.resources.inter_tight_bold
+import movieappcmp.composeapp.generated.resources.inter_tight_extra_bold
+import movieappcmp.composeapp.generated.resources.inter_tight_light
+import movieappcmp.composeapp.generated.resources.inter_tight_medium
+import movieappcmp.composeapp.generated.resources.inter_tight_regular
+import movieappcmp.composeapp.generated.resources.inter_tight_semi_bold
+import movieappcmp.composeapp.generated.resources.inter_tight_thin
+import movieappcmp.composeapp.generated.resources.ubuntu_bold
+import movieappcmp.composeapp.generated.resources.ubuntu_bold_italic
+import movieappcmp.composeapp.generated.resources.ubuntu_italic
+import movieappcmp.composeapp.generated.resources.ubuntu_light
+import movieappcmp.composeapp.generated.resources.ubuntu_light_italic
+import movieappcmp.composeapp.generated.resources.ubuntu_medium
+import movieappcmp.composeapp.generated.resources.ubuntu_medium_italic
+import movieappcmp.composeapp.generated.resources.ubuntu_regular
 
 
 @Composable

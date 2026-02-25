@@ -39,9 +39,9 @@ import com.brainx.ticket_tribe.presentation.theme.defaultEditTextShape
 import com.brainx.utils_extensions.constants.ExtConstants
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import tickettribekmp.composeapp.generated.resources.Res
-import tickettribekmp.composeapp.generated.resources.ic_search
-import tickettribekmp.composeapp.generated.resources.search_movies
+import movieappcmp.composeapp.generated.resources.Res
+import movieappcmp.composeapp.generated.resources.ic_search
+import movieappcmp.composeapp.generated.resources.search_movies
 
 @Composable
 fun CustomBasicTextField(
