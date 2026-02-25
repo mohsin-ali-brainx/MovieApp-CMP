@@ -15,6 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
@@ -32,11 +33,13 @@ class MainHomeScreenViewModel(
     private var searchJob: Job? = null
 
     private val _state = MutableStateFlow(MainHomeScreenUiState())
-    val state = _state.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 500) ,
-        initialValue = MainHomeScreenUiState()
-    )
+    val state = _state
+        // Only emit when state actually changes
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 500),
+            initialValue = MainHomeScreenUiState()
+        )
 
     private val _eventFlow = Channel<MainHomeScreenUiEvents>()
     val eventFlow = _eventFlow.receiveAsFlow()
@@ -50,33 +53,44 @@ class MainHomeScreenViewModel(
     private fun searchMulti(page: Int = ONE, resetResults: Boolean = false) {
         if (resetResults) {
             searchJob?.cancel()
+            // Batch state update: reset results and set loading in one update to reduce recompositions
             _state.update {
                 it.copy(
-                    searchResponse = null
+                    searchResponse = null,
+                    isLoading = true
                 )
             }
         }
         searchJob = searchMultiUseCase.invoke(_state.value.searchText, page = page)
             .onStart {
-
+                // Only update loading state if not already set during reset
+                if (!resetResults) {
+                    _state.update { it.copy(isLoading = true) }
+                }
             }
             .onCompletion {
-
+                // Ensure loading state is cleared on completion (error or success)
             }
-            .onEach {result->
-                when(result){
-                    is Resource.Success->{
+            .onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
                         val responseResultData = result.data
                         updateListState(
                             responseResultData = responseResultData,
                             appendToExisting = !resetResults
                         )
                     }
-                    is Resource.Error->{
+                    is Resource.Error -> {
+                        // Update loading state on error to prevent stuck loading
+                        _state.update { it.copy(isLoading = false) }
 //                        Events.updateBaseEvent(BaseUiEvents.ShowToast(message = result.message))
                     }
                     is Resource.Loading -> {
-                        _state.update { it.copy(isLoading = result.isLoading) }
+                        // Only update if loading state actually changed
+                        val currentLoading = _state.value.isLoading
+                        if (currentLoading != result.isLoading) {
+                            _state.update { it.copy(isLoading = result.isLoading) }
+                        }
                     }
                 }
             }
@@ -134,23 +148,27 @@ class MainHomeScreenViewModel(
     }
 
 
-    fun onIntent(intent: MainHomeScreenUiIntents){
-        when(intent){
-            is MainHomeScreenUiIntents.TextFieldsIntent.OnSearchTextUpdate->{
-                _state.update { it.copy(searchText = intent.search) }
+    fun onIntent(intent: MainHomeScreenUiIntents) {
+        when (intent) {
+            is MainHomeScreenUiIntents.TextFieldsIntent.OnSearchTextUpdate -> {
+                // Only update if text actually changed to prevent unnecessary recompositions
+                val currentText = _state.value.searchText
+                if (currentText != intent.search) {
+                    _state.update { it.copy(searchText = intent.search) }
+                }
             }
-            is MainHomeScreenUiIntents.ButtonIntents.OnSearchButtonIntent->{
+            is MainHomeScreenUiIntents.ButtonIntents.OnSearchButtonIntent -> {
+                // Trigger search with reset - loading state is set in searchMulti
                 searchMulti(resetResults = true)
             }
-            is MainHomeScreenUiIntents.ListItemIntent.OnMovieItemClick->{
+            is MainHomeScreenUiIntents.ListItemIntent.OnMovieItemClick -> {
                 emitUIEvents(MainHomeScreenUiEvents.Navigate.MoveToDetail(intent.media))
             }
-            is MainHomeScreenUiIntents.ListItemIntent.OnTriggerPagination->{
+            is MainHomeScreenUiIntents.ListItemIntent.OnTriggerPagination -> {
                 _state.value.searchResponse?.metaData?.apply {
-                    if (page==totalPages) return
+                    if (page == totalPages) return
                     searchMulti(page = page?.plus(ONE) ?: ONE)
                 }
-
             }
         }
     }

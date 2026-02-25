@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import com.brainx.ticket_tribe.presentation.theme.AppColors
+import com.brainx.ticket_tribe.presentation.theme.LocalAppTheme
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomText
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomTextToDisplay
@@ -90,7 +90,7 @@ private fun AppDefaultButton(
 fun PrimaryButton(
     modifier: Modifier = Modifier,
     buttonText:CustomTextToDisplay.StringResourceText,
-    buttonColor: Color = AppColors.primaryButtonColor,
+    buttonColor: Color = LocalAppTheme.current.primaryButtonColor,
     isEnable:Boolean=true,
     borderColor: Color?=null,
     leadingIcon: (@Composable() () -> Unit)? = null,
@@ -98,17 +98,20 @@ fun PrimaryButton(
     onClickAction: () -> Unit
 ){
     val isButtonEnable by remember(isEnable) { derivedStateOf { isEnable } }
+    val clickAction by remember(onClickAction) { derivedStateOf { onClickAction }  }
+    val buttonColor by remember(isButtonEnable) { derivedStateOf { if (isButtonEnable) buttonColor else buttonColor.copy(alpha = 0.90f)  }  }
+
     AppDefaultButton(
         modifier = modifier.then(Modifier.defaultFullWidthButtonModifier()),
         buttonText = buttonText,
-        textColor = AppColors.primaryWhiteTextColor,
-        buttonColor = if (isButtonEnable) buttonColor else buttonColor.copy(alpha = 0.75f),
+        textColor = LocalAppTheme.current.primaryWhiteTextColor,
+        buttonColor = buttonColor,
         fontSize = AppDimens.Fonts.font16,
         fontWeight = FontWeight.W600,
         borderColor = borderColor,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         isClickable = isButtonEnable,
-        onClickAction = onClickAction
+        onClickAction = clickAction
     )
 }

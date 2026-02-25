@@ -7,13 +7,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
-import com.brainx.ticket_tribe.presentation.theme.AppColors
+import com.brainx.ticket_tribe.presentation.theme.LocalAppTheme
 import com.brainx.ticket_tribe.presentation.theme.appPrimaryFontFamily
 
 @Composable
-fun EditTextStyle(
+fun editTextStyle(
     fontSize: TextUnit = MaterialTheme.typography.bodyLarge.fontSize,
-    textColor: Color = AppColors.primaryWhiteTextColor,
+    textColor: Color = LocalAppTheme.current.primaryWhiteTextColor,
     textAlign: TextAlign = TextAlign.Start
 )= TextStyle(
     textColor,

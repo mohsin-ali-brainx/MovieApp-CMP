@@ -18,10 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.brainx.ticket_tribe.presentation.navigation.AppNavHostGraph
 import com.brainx.ticket_tribe.presentation.theme.MovieAppTheme
-import org.jetbrains.compose.resources.painterResource
 
-import tickettribekmp.composeapp.generated.resources.Res
-import tickettribekmp.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 @Preview

@@ -89,11 +89,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.brainx.ticket_tribe"
+    namespace = "com.brainx.movie_app"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.brainx.ticket_tribe"
+        applicationId = "com.brainx.movie_app"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

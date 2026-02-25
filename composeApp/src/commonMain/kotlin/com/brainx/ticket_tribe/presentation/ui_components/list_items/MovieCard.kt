@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.brainx.domain.network.dto_mappers.movie.MediaDTO
-import com.brainx.ticket_tribe.presentation.theme.AppColors
+import com.brainx.ticket_tribe.presentation.theme.LocalAppTheme
 import com.brainx.ticket_tribe.presentation.theme.AppDimens
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomText
 import com.brainx.ticket_tribe.presentation.ui_components.text.CustomTextToDisplay
@@ -43,6 +43,13 @@ import com.brainx.utils_extensions.constants.ExtConstants.StringConstants.NO_IMA
 
 @Composable
 fun MovieCard(modifier: Modifier, data: MediaDTO) {
+
+    val appThemeColor =  LocalAppTheme.current
+
+    val displayText = remember(data.name, data.title) {
+        data.name ?: data.title ?: ExtConstants.StringConstants.EMPTY
+    }
+
     Column(
         modifier = modifier
             .width(140.dp),
@@ -55,9 +62,9 @@ fun MovieCard(modifier: Modifier, data: MediaDTO) {
                 .fillMaxWidth()
                 .padding(top = AppDimens.Padding.defaultPadding),
             text = CustomTextToDisplay.StringText(
-                text = data.name ?: data.title ?: ExtConstants.StringConstants.EMPTY
+                text = displayText
             ),
-            color = AppColors.secondaryTextColor,
+            color = appThemeColor.secondaryTextColor,
             fontSize = AppDimens.Fonts.font18,
             maxLines = 1,
             minLines = 1,
@@ -67,71 +74,3 @@ fun MovieCard(modifier: Modifier, data: MediaDTO) {
     }
 }
 
-@Composable
-fun MoviePoster(modifier: Modifier= Modifier, url: String?) {
-    Box(
-        modifier = modifier
-            .height(220.dp)
-            .clip(RoundedCornerShape(AppDimens.Radius.radius16)),
-        contentAlignment = Alignment.Center
-    ) {
-        var imageLoadResult by remember {
-            mutableStateOf<Result<Painter>?>(null)
-        }
-        val imageUrl = if (url != null) "https://image.tmdb.org/t/p/w500${url}" else NO_IMAGE_URL
-        val painter = rememberAsyncImagePainter(
-            model = imageUrl,
-            onSuccess = {
-                imageLoadResult =
-                    if (it.painter.intrinsicSize.width > ONE && it.painter.intrinsicSize.height > ONE) {
-                        Result.success(it.painter)
-                    } else {
-                        Result.failure(Exception("Invalid image size"))
-                    }
-            },
-            onError = {
-                it.result.throwable.printStackTrace()
-                imageLoadResult = Result.failure(it.result.throwable)
-            }
-        )
-
-        val painterState by painter.state.collectAsStateWithLifecycle()
-        val transition by animateFloatAsState(
-            targetValue = if (painterState is AsyncImagePainter.State.Success) {
-                ExtConstants.FloatConstants.ONE
-            } else {
-                ExtConstants.FloatConstants.ZERO
-            },
-            animationSpec = tween(durationMillis = IMAGE_ANIMATION_DURATION)
-        )
-
-        when (val result = imageLoadResult) {
-            null -> PulseAnimation(
-                modifier = Modifier.size(60.dp)
-            )
-
-            else -> {
-                Image(
-                    painter = painter,
-                    contentDescription = "",
-                    contentScale = if (result.isSuccess) {
-                        ContentScale.Crop
-                    } else {
-                        ContentScale.Fit
-                    },
-                    modifier = Modifier
-                        .aspectRatio(
-                            ratio = 0.65f,
-                            matchHeightConstraintsFirst = true
-                        )
-                        .graphicsLayer {
-                            rotationX = (1f - transition) * 30f
-                            val scale = 0.8f + (0.2f * transition)
-                            scaleX = scale
-                            scaleY = scale
-                        }
-                )
-            }
-        }
-    }
-}
