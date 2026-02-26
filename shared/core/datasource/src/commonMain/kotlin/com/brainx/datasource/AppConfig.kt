@@ -14,6 +14,10 @@ sealed interface AppConfig {
 
         internal const val DATA_STORE_FILE_NAME = "movie_app.preferences_pb"
     }
+    data object RoomDatabase : AppConfig{
+        internal const val DATABASE_NAME = "movie_app_db"
+    }
+
     data object Staging : AppConfig
     data object Dev : AppConfig
     data object Local : AppConfig

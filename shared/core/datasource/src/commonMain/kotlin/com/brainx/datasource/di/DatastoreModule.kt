@@ -12,10 +12,6 @@ import org.koin.dsl.module
 
 internal val datastorePrefManagerModule = module {
     single {
-        DatastoreFileProviderImp()
-    }.bind<DatastoreFileProvider>()
-
-    single {
         DatastorePreferenceManager(
             datastorePreference = get<DataStore<Preferences>>()
         )

@@ -5,5 +5,5 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 internal actual val roomPlatformModule: Module = module {
-    single { DatabaseFactory() }
+    single { DatabaseFactory(get()) }
 }
