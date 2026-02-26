@@ -9,8 +9,10 @@ val datastoreModulesProvider = listOf(
 
     datastorePrefManagerModule,
 
-    movieConfigModule,
+//    movieConfigModule,
 
-    repositoryModule
+    repositoryModule,
+
+    appConfigModule
 
 ) + provideRoomDatabaseModule + ktorModuleProvider + datastoreModuleProvider
