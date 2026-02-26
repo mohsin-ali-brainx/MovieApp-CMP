@@ -11,5 +11,5 @@ import androidx.datastore.preferences.core.Preferences
 
 internal actual val datastorePlatformModule: Module
     get() = module {
-        single<DataStore<Preferences>> { createDataStore(androidApplication()) }
+        single<DataStore<Preferences>> { createDataStore(androidApplication(),get()) }
     }
