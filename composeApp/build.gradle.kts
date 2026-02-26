@@ -1,6 +1,13 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.gradle.api.GradleException
+import java.util.Properties
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -105,13 +112,38 @@ android {
         }
     }
     buildTypes {
+        getByName("debug") {
+            val apiKey = localProperties.getProperty("TMDB_API_KEY", "")
+            val accessToken = localProperties.getProperty("TMDB_ACCESS_TOKEN", "")
+            buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
+            buildConfigField("String", "TMDB_ACCESS_TOKEN", "\"$accessToken\"")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
         getByName("release") {
+            val apiKey = localProperties.getProperty("TMDB_API_KEY", "")
+            val accessToken = localProperties.getProperty("TMDB_ACCESS_TOKEN", "")
+            buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
+            buildConfigField("String", "TMDB_ACCESS_TOKEN", "\"$accessToken\"")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             isMinifyEnabled = false
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
